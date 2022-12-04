@@ -1,7 +1,7 @@
 package brs;
 import java.util.Scanner;
 
-
+//here is the trial update
 class Bus{
 
 	String name;
