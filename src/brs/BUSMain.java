@@ -2,6 +2,7 @@ package brs;
 import java.util.Scanner;
 
 //here is the trial update
+//this is updated on github
 class Bus{
 
 	String name;
