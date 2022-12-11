@@ -121,7 +121,7 @@ class BusOperation{
 		System.out.println("\n");
 		System.out.println("  ------------ YOUR TICKET ------------");
 		System.out.println(" | Name: "+ psg.PassengerName+"\t\t\t\t|");
-		System.out.println(" | Bus ID: "+ psg.id+"\t"+"| Bus Name: "+ TheArr[psg.id].name+"\t|");
+		System.out.println(" | Bus ID: "+ psg.id+"\t"+"| Bus Name: "+ TheArr[psg.id-1].name+"\t|");
 		System.out.println(" | Seat No.: "+(psg.SeatNo)+"\t| Fare: "+psg.fare+"\t\t|");
 		System.out.println(" | PNR: "+psg.PNR+"\t\t\t\t|");
 		System.out.println("  -------------------------------------");
@@ -439,7 +439,7 @@ class BusOperation{
 		TheArr[0].seats[2]=new int[]{0,0,0,0,0,0,0,0,0,0};
 		//Bus 2
 		TheArr[1]=new Bus(002,7);
-		TheArr[1].name="KK";
+		TheArr[1].name="ROYAL";
 		TheArr[1].time="10:30";
 		TheArr[1].stops[0]="Pune";
 		TheArr[1].dist[0]=0;
@@ -474,7 +474,7 @@ class BusOperation{
 		TheArr[2].seats[1]=new int[]{0,0,0,0,0,0,0,0,0,0};
 		//Bus 4
 		TheArr[3]=new Bus(004,6);
-		TheArr[3].name="Tejaswini";
+		TheArr[3].name="TEJASWINI";
 		TheArr[3].time="10:30";
 		TheArr[3].stops[0]="Pune";
 		TheArr[3].dist=new int[] {0,114,122,191,182,125};
@@ -491,7 +491,7 @@ class BusOperation{
 		TheArr[3].seats[5]=new int[]{0,0,0,0,0,0,0,0,0,0};
 		//Bus5
 		TheArr[4]=new Bus(005,3);
-		TheArr[4].name="JABBAR";
+		TheArr[4].name="LIBERTY";
 		TheArr[4].time="10:30";
 		TheArr[4].stops[0]="Aurangabad";
 		TheArr[4].dist=new int[] {0,114,122};
