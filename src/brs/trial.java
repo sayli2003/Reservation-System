@@ -1,9 +1,8 @@
-package brs;
-import java.io.*;
+package miniproj;
 import java.util.*;
 
 // main class
-public class trial {
+public class BusReser {
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		int g=1, ch=0; // for menu
@@ -12,10 +11,9 @@ public class trial {
 		Bus bus;
 		BusOperation bo = new BusOperation(); // operation class
 		bo.initiate(); // Initialize all buses
-
 		do {
 			System.out.println(" ----------------------------------------");
-			System.out.println("  1. BOOKING   2. CANCELLATION   3.Check Status  4. EXIT");
+			System.out.println("  1. BOOKING   2. CANCELLATION   3. CHECK STATUS  4. EXIT");
 			ch=sc.nextInt();
 			System.out.println("");
 
@@ -37,9 +35,8 @@ public class trial {
 				String des=sc.next();
 				depd=bo.search(dep,des);
 
-
 				if(depd!=null) {
-					System.out.println("Enter Bus Id: ");
+					System.out.print("  Enter Bus Id: ");
 					int id=sc.nextInt();
 					bus=bo.BusFinder(id);
 					bus.ID=id;
@@ -49,52 +46,52 @@ public class trial {
 				break;
 
 			case 2:
-				System.out.println("Enter Bus Id: ");
+				System.out.print("  Enter Bus Id: ");
 				bus=bo.BusFinder(sc.nextInt());
 				sc.nextLine();
 				if(bus!=null) {
-					System.out.println("Enter PRN No: ");
+					System.out.print("  Enter PRN No: ");
 					int prn =sc.nextInt();
 					sc.nextLine();
 					psg=bo.Passengerfinder(bus, prn);
 					if(psg!=null) {
-						System.out.println("Comfirm Cancellation? Y/N?");
-					char cancel=sc.nextLine().charAt(0);
-					if(cancel=='Y'||cancel=='y') {
-						bo.cancellation(bus,psg);
-					}
-					else {
-						System.out.println("Cancellation Declined");
-					}
+						System.out.print("  Comfirm Cancellation? Y/N :  ");
+						char cancel=sc.nextLine().charAt(0);
+						if(cancel=='Y'||cancel=='y') {
+							bo.cancellation(bus,psg);
+						}
+						else {
+							System.out.println("  Cancellation Declined !");
+						}
 
-				}else {
-					System.out.println("Pasenger Not Declined");
-				}
+					}else {
+						System.out.println("  Pasenger Not Declined !");
 					}
+				}
 				else {
-					System.out.println("Bus Not Found!!");
+					System.out.println("  Bus Not Found!!");
 				}
 				bo.Queueseat_Confirmation();
 				break;
 
 			case 3:
-				System.out.println("Enter Bus Id: ");
+				System.out.print("  Enter Bus Id: ");
 				bus=bo.BusFinder(sc.nextInt());
 				sc.nextLine();
 				if(bus!=null) {
-					System.out.println("Enter PRN No: ");
+					System.out.print("  Enter PRN No: ");
 					int prn =sc.nextInt();
 					if(bo.Passengerfinder(bus, prn)==null) {
 						psg=bo.Passenger_in_Queue(bus, prn);
 						if(psg!=null) {
-							System.out.println("Passenger in queue");
+							System.out.println("  Passenger in queue");
 						}
 						else {
-							System.out.println("Passenger not found");
+							System.out.println("  Passenger not found");
 						}
 					}
 					else {
-						System.out.println("Booking confirmed");
+						System.out.println("  Booking Status: Seat Confirmed");
 					}
 				}
 				bo.Queueseat_Confirmation();
@@ -124,11 +121,12 @@ class BusOperation{
 		System.out.println("\n");
 		System.out.println("  ------------ YOUR TICKET ------------");
 		System.out.println(" | Name: "+ psg.PassengerName+"\t\t\t\t|");
-		System.out.println(" | Bus ID: "+ psg.id+"\t"+"| Bus Name: "+ TheArr[psg.id].name+"\t\t|");
+		System.out.println(" | Bus ID: "+ psg.id+"\t"+"| Bus Name: "+ TheArr[psg.id].name+"\t|");
 		System.out.println(" | Seat No.: "+(psg.SeatNo)+"\t| Fare: "+psg.fare+"\t\t|");
-		System.out.println(" | PNR: "+psg.PNR+"\t\t\t\t|\n\n");
+		System.out.println(" | PNR: "+psg.PNR+"\t\t\t\t|");
+		System.out.println("  -------------------------------------");
 	}
-	
+
 	int[] search(String dep, String des){
 		int departureFound=0, found_flag=0;
 		int[] depd=new int[2];
@@ -173,7 +171,7 @@ class BusOperation{
 				depd[0] = j;
 				flg++;
 			}
-			if(dep.equalsIgnoreCase(bus.stops[j])) {
+			if(des.equalsIgnoreCase(bus.stops[j])) {
 				depd[1] = j;
 				flg++;
 			}
@@ -195,26 +193,29 @@ class BusOperation{
 	}
 
 	PassengerDetails Passengerfinder(Bus bus,int prn) {
-		System.out.println("Inside finder");
 		PassengerDetails psg=bus.Psg.search(prn);
 		if(psg!=null) {
-			System.out.println("Passenger Name :"+psg.PassengerName);
+			System.out.println();
+			System.out.print("  Passenger Name :"+psg.PassengerName+"\t\t");
 			System.out.println("SeatNo. :"+psg.SeatNo);
-			System.out.println("Departure :"+psg.dep);
-			System.out.println("Destination :"+psg.des);
+			System.out.print("  Departure :"+TheArr[psg.id-1].stops[psg.dep]+"\t\t\t");
+			System.out.println("Destination :"+TheArr[psg.id-1].stops[psg.des]);
+			System.out.println();
 		}
 		return psg;
 	}
+	
 	PassengerDetails Passenger_in_Queue(Bus bus,int prn){
 		PassengerDetails psg=bus.WL.search(prn);
 		if(psg!=null) {
-			System.out.println("Passenger Name :"+psg.PassengerName);
-			System.out.println("SeatNo. :"+psg.SeatNo);
-			System.out.println("Departure :"+psg.dep);
-			System.out.println("Destination :"+psg.des);
+			System.out.println("  Passenger Name :"+psg.PassengerName);
+			System.out.println("  SeatNo. :"+psg.SeatNo);
+			System.out.println("  Departure :"+psg.dep);
+			System.out.println("  Destination :"+psg.des);
 		}
 		return psg;
 	} 
+	
 	void Show_Seats(Bus bus, PassengerDetails psg) {
 		System.out.println("    ------------");
 		System.out.print("   | ");
@@ -251,27 +252,30 @@ class BusOperation{
 		int seats=sc.nextInt();
 		sc.nextLine();
 		if(SeatCounter(bus,seats,depd)) {
-		for(int a=0;a<seats;a++) {
-			System.out.print("  Enter your name: ");
-			psg.PassengerName=sc.nextLine();
-			System.out.print("  Enter seat number: ");
-			psg.SeatNo=sc.nextInt();
-			sc.nextLine();
-			System.out.println();
-			System.out.println("  Do you want to confirm booking?? Y/N");
-			String chr=sc.nextLine();
-			char ch= chr.charAt(0);
-			if(ch=='y' || ch=='Y') {
+			for(int a=0;a<seats;a++) {
+				psg.id=bus.ID;
+				psg.dep=depd[0];
+				psg.des=depd[1];
+				System.out.print("  Enter your name: ");
+				psg.PassengerName=sc.nextLine();
+				System.out.print("  Enter seat number: ");
+				psg.SeatNo=sc.nextInt();
+				sc.nextLine();
+				System.out.println("\n  *Fare: "+fare(bus, psg));
 				System.out.println();
-				CheckStatus(bus,psg);
-				psg.PNR=depd[0]*1000+bus.ID*100+depd[1]*10+psg.SeatNo;
-				bus.Psg.add(psg);
-				bus.Psg.display();
-				System.out.println("Booking confirmed!!");
-				System.out.println("Your PRN :"+psg.PNR);
-				psg=new PassengerDetails();
+				System.out.print("  Do you want to confirm booking?? Y/N : ");
+				String chr=sc.nextLine();
+				char ch= chr.charAt(0);
+				if(ch=='y' || ch=='Y') {
+					System.out.println();
+					CheckStatus(bus,psg);
+					psg.PNR=depd[0]*1000+bus.ID*100+depd[1]*10+psg.SeatNo;
+					bus.Psg.add(psg);
+					ticket(psg);
+					System.out.println("  * Note your PNR for future reference\n\n");
+					psg=new PassengerDetails();
+				}
 			}
-		}
 		}
 		else {			
 			if(bus.seats[0].length
@@ -292,12 +296,9 @@ class BusOperation{
 						System.out.println("your PRN No.: "+psg.PNR);
 						bus.WL.enqueue(psg);
 					}
-				}}
-			
-
+				}
+			}
 		}
-
-
 	}
 
 	void ChangeStatus(Bus bus, PassengerDetails psg) {
@@ -306,19 +307,16 @@ class BusOperation{
 		}
 
 	}
+
 	void Queueseat_Confirmation() {
-		System.out.println("INside confirmation");
 		int seatflag=0;
 		for(int i=0;i<TheArr.length;i++) {
-			System.out.println("INside confirmation bus loop");
 			if(!TheArr[i].WL.isEmpty()) {
 				PassengerDetails psg=TheArr[i].WL.front.p;
 				int[] depd=new int[] {psg.dep,psg.des};
 				while(SeatCounter(TheArr[i],1,depd) && !TheArr[i].WL.isEmpty()) {
-					System.out.println("INside confirmation while loop");
 					for(int j=0;j<TheArr[i].seats[0].length;j++) {
 						for(int m=psg.dep;m<=psg.des;m++) {
-							System.out.println("Checking");
 							if(TheArr[i].seats[m][j]!=0) {
 								seatflag=1;
 								break;
@@ -328,17 +326,17 @@ class BusOperation{
 							psg.SeatNo=j+1;
 							CheckStatus(TheArr[i],psg);
 							TheArr[i].Psg.add(psg);
-							System.out.println("seat empty dequeueing");
 							TheArr[i].WL.dequeue();
 							break;
 						}
 						seatflag=0;
 					}
-					
+
 				}
 			}
 		}
 	}
+
 	boolean SeatCounter(Bus bus,int seats,int[] depd) {
 		int seatcounter=0,flag=0;
 		for(int i=0;i<bus.seats[0].length;i++) {
@@ -358,6 +356,7 @@ class BusOperation{
 		}
 		return false;
 	}
+
 	void cancellation(Bus bus,PassengerDetails psg) {
 		for(int m=psg.dep;m<=psg.des;m++) {
 			if(bus.seats[m][psg.SeatNo - 1]==1) {
@@ -371,6 +370,7 @@ class BusOperation{
 		bus.Psg.delete(psg);
 		System.out.println("Cancellation Successful");
 	}
+
 	void CheckStatus(Bus bus,PassengerDetails psg) { //Seat booking
 		int seatflag=0;
 		for(int m=psg.dep;m<=psg.des;m++) {
@@ -390,12 +390,9 @@ class BusOperation{
 		if(seatflag==1) {
 			ChangeStatus(bus,psg);
 			System.out.println("  Booking successful!");
-			// farecal o = new farecal();
-			fare(bus,psg);
-			ticket(psg);
+			psg.fare=fare(bus,psg);
 		}
 	}
-
 
 	Boolean CheckStatus_print(Bus bus,PassengerDetails psg, int x) { //Seat booking
 		int seatflag=0;
@@ -412,17 +409,19 @@ class BusOperation{
 
 	}
 
-	void fare(Bus bus, PassengerDetails psg) {
+	int fare(Bus bus, PassengerDetails psg) {
 		int fare=0;
 		int rate=2, total_dis=0;
 		for(int i=psg.dep; i<=psg.des; i++) {
-		total_dis += TheArr[psg.id].dist[i];
+			total_dis += TheArr[bus.ID-1].dist[i];
 		}
 		fare = total_dis * rate;
-		psg.fare = fare;
-		}
+//		psg.fare = fare;
+		return fare;
+	}
 
 	Bus[] TheArr=new Bus[5];
+	
 	void initiate() {
 
 		//Bus 1
@@ -478,7 +477,7 @@ class BusOperation{
 		TheArr[3].name="Tejaswini";
 		TheArr[3].time="10:30";
 		TheArr[3].stops[0]="Pune";
-		TheArr[3].dist=new int[] {0,114,122,191,182};
+		TheArr[3].dist=new int[] {0,114,122,191,182,125};
 		TheArr[3].seats[0]=new int[]{0,0,0,0,0,0,0,0,0,0};
 		TheArr[3].stops[1]="Satara";
 		TheArr[3].seats[1]=new int[]{0,0,0,0,0,0,0,0,0,0};
@@ -579,15 +578,12 @@ class LinkedList{
 	}
 	void delete(PassengerDetails psg) {
 		Node ptr=head;
-		System.out.println("Deletion");
 		if(ptr!=null) {
 			if(ptr.p.PNR==psg.PNR) {
 				head=head.next;
-				System.out.println("PRN"+ptr.p.PNR);
 			}
 			else {
 				while(ptr.next!=null) {
-					System.out.println("PRN"+ptr.p.PNR);
 					if(ptr.next.p.PNR==psg.PNR) {
 						break;
 					}
