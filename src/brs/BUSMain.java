@@ -12,118 +12,130 @@ public class BUSMain {
 		BusOperation bo = new BusOperation(); // operation class
 		bo.initiate(); // Initialize all buses
 		do {
+
 			//display menu
-			
 			System.out.println(" --------------------------------");
 			System.out.println("|\t1. BOOKING\t\t|\n|_______________________________|\n|\t2. CANCELLATION\t\t|\n|_______________________________|\n|\t3. CHECK STATUS\t\t|\n|_______________________________|\n|\t4. EXIT\t\t\t|\n|_______________________________|\n");
-			ch=sc.nextInt();
 			
-			System.out.println("");
 
-			switch(ch) {
-			case 1:
-				
-				//choice 1 Booking is selected
-				
-				//displays the available locations
-				//for comfort of running the code
-				System.out.println("          Available Stops");
-				System.out.println("--------------------------------------");
-				for(int i=0; i< bo.AvailableStops.length; i++) {
-					System.out.print(" "+ bo.AvailableStops[i]+" | ");
-					if(i%4==3) {
-						System.out.println("");
+			
+			try {
+				ch=sc.nextInt();
+				System.out.println("");
+				switch(ch) {
+				case 1:
+
+					//choice 1 Booking is selected
+
+					//displays the available locations
+					//for comfort of running the code
+					System.out.println("          Available Stops");
+					System.out.println("--------------------------------------");
+					for(int i=0; i< bo.AvailableStops.length; i++) {
+						System.out.print(" "+ bo.AvailableStops[i]+" | ");
+						if(i%4==3) {
+							System.out.println("");
+						}
 					}
-				}
-				System.out.println();
-				System.out.println("--------------------------------------");
-				
-				
-				//Accepting the departure and destination from the user
-				
-				System.out.print("  Enter the departure:  ");
-				String dep=sc.next();
-				System.out.print("  Enter the destination:  ");
-				String des=sc.next();
-				
-				//Displays the buses available
-				depd=bo.search(dep,des);
-				
-				//if there are buses available
-				if(depd!=null) {
-					//Accepting the Bus id out of the displayed choices
+					System.out.println();
+					System.out.println("--------------------------------------");
+
+
+					//Accepting the departure and destination from the user
+
+					System.out.print("  Enter the departure:  ");
+					String dep=sc.next();
+					System.out.print("  Enter the destination:  ");
+					String des=sc.next();
+
+					//Displays the buses available
+					depd=bo.search(dep,des);
+
+					//if there are buses available
+					if(depd!=null) {
+						//Accepting the Bus id out of the displayed choices
+						System.out.print("  Enter Bus Id: ");
+						int id=sc.nextInt();
+						//returns the object of the class Bus corresponding to the id entered
+						bus=bo.BusFinder(id);
+						bus.ID=id;
+						//reinitializing the bus stops for the above bus
+						depd=bo.busF(bus, dep, des);
+						//booking of the seat
+						bo.bookSeat(bus, depd);
+					}
+					break;
+
+				case 2:
+					//Choice 2 Cancelling a booked seat
+
 					System.out.print("  Enter Bus Id: ");
-					int id=sc.nextInt();
-					//returns the object of the class Bus corresponding to the id entered
-					bus=bo.BusFinder(id);
-					bus.ID=id;
-					//reinitializing the bus stops for the above bus
-					depd=bo.busF(bus, dep, des);
-					//booking of the seat
-					bo.bookSeat(bus, depd);
-				}
-				break;
-
-			case 2:
-				//Choice 2 Cancelling a booked seat
-				
-				System.out.print("  Enter Bus Id: ");
-				bus=bo.BusFinder(sc.nextInt());
-				sc.nextLine();
-				if(bus!=null) {
-					System.out.print("  Enter PRN No: ");
-					int prn =sc.nextInt();
+					bus=bo.BusFinder(sc.nextInt());
 					sc.nextLine();
-					psg=bo.Passengerfinder(bus, prn);
-					if(psg!=null) {
-						System.out.print("  Comfirm Cancellation? Y/N :  ");
-						char cancel=sc.nextLine().charAt(0);
-						if(cancel=='Y'||cancel=='y') {
-							bo.cancellation(bus,psg);
-						}
-						else {
-							System.out.println("  Cancellation Declined !");
-						}
-
-					}else {
-						System.out.println("  Pasenger Not Declined !");
-					}
-				}
-				else {
-					System.out.println("  Bus Not Found!!");
-				}
-				bo.Queueseat_Confirmation();
-				break;
-
-			case 3:
-				System.out.print("  Enter Bus Id: ");
-				bus=bo.BusFinder(sc.nextInt());
-				sc.nextLine();
-				if(bus!=null) {
-					System.out.print("  Enter PRN No: ");
-					int prn =sc.nextInt();
-					if(bo.Passengerfinder(bus, prn)==null) {
-						psg=bo.Passenger_in_Queue(bus, prn);
+					if(bus!=null) {
+						System.out.print("  Enter PNR No: ");
+						int prn =sc.nextInt();
+						sc.nextLine();
+						psg=bo.Passengerfinder(bus, prn);
 						if(psg!=null) {
-							System.out.println("  Passenger in queue");
-						}
-						else {
-							System.out.println("  Passenger not found");
+							System.out.print("  Comfirm Cancellation? Y/N :  ");
+							char cancel=sc.nextLine().charAt(0);
+							if(cancel=='Y'||cancel=='y') {
+								bo.cancellation(bus,psg);
+							}
+							else {
+								System.out.println("  Cancellation Declined !");
+							}
+
+						}else {
+							System.out.println("  Pasenger Not Declined !");
 						}
 					}
 					else {
-						System.out.println("  Booking Status: Seat Confirmed");
+						System.out.println("  Bus Not Found!!");
 					}
-				}
-				bo.Queueseat_Confirmation();
-				break;
+					bo.Queueseat_Confirmation();
+					break;
 
-			case 4:
-				g=0;
-				break;
-			default:
-				System.out.println("");
+				case 3:
+					System.out.print("  Enter Bus Id: ");
+					bus=bo.BusFinder(sc.nextInt());
+					sc.nextLine();
+					if(bus!=null) {
+						System.out.print("  Enter PNR No: ");
+						int prn =sc.nextInt();
+						if(bo.Passengerfinder(bus, prn)==null) {
+							psg=bo.Passenger_in_Queue(bus, prn);
+							if(psg!=null) {
+								System.out.println("  Passenger in queue");
+							}
+							else {
+								System.out.println("  Passenger not found");
+							}
+						}
+						else {
+							System.out.println("  Booking Status: Seat Confirmed");
+						}
+					}
+					bo.Queueseat_Confirmation();
+					break;
+
+				case 4:
+					g=0;
+					break;
+				default:
+					System.out.println("");
+				}
+
 			}
+			catch(Exception e)  
+			{  
+				System.out.println("Error has occured try again"); 
+				BUSMain Main = new BUSMain();
+				Main.main(args);
+				
+			}  
+			
 		}while(g==1);
 		sc.close();
 	}
@@ -140,7 +152,7 @@ class BusOperation{
 			"Raigarh", "Ratnagiri"};
 
 	void ticket(PassengerDetails psg) {
-		
+
 		System.out.println("\n");
 		System.out.println("  ------------ YOUR TICKET ------------");
 		System.out.println(" | Name: "+ psg.PassengerName+"\t\t\t\t|");
@@ -205,7 +217,7 @@ class BusOperation{
 
 		return null;
 	}
-	
+
 	//return the bus object 
 	Bus BusFinder(int BusId) {
 		for (int i=0;i<TheArr.length;i++) {
@@ -229,7 +241,7 @@ class BusOperation{
 		}
 		return psg;
 	}
-	
+
 	//Finding and displaying the passenger information from the list of passengers in queue
 	PassengerDetails Passenger_in_Queue(Bus bus,int prn){
 		PassengerDetails psg=bus.WL.search(prn);
@@ -241,7 +253,7 @@ class BusOperation{
 		}
 		return psg;
 	} 
-	
+
 	//Displays the seats and availability
 	void Show_Seats(Bus bus, PassengerDetails psg) {
 		System.out.println("    ------------");
@@ -324,7 +336,7 @@ class BusOperation{
 						psg.dep=depd[0];
 						psg.des=depd[1];
 						psg.PNR=(depd[0]+1)*1000+bus.ID*100+depd[1]*10+(bus.WL.length+1);
-						System.out.println("your PRN No.: "+psg.PNR);
+						System.out.println("your PNR No.: "+psg.PNR);
 						bus.WL.enqueue(psg);
 					}
 				}
@@ -370,7 +382,7 @@ class BusOperation{
 			}
 		}
 	}
-	
+
 	//counts the total number of free seats
 	boolean SeatCounter(Bus bus,int seats,int[] depd) {
 		int seatcounter=0,flag=0;
@@ -391,8 +403,8 @@ class BusOperation{
 		}
 		return false;
 	}
-	
-//	changes status of the seat from booked to unbooked
+
+	//	changes status of the seat from booked to unbooked
 	void cancellation(Bus bus,PassengerDetails psg) {
 		for(int m=psg.dep;m<=psg.des;m++) {
 			if(bus.seats[m][psg.SeatNo - 1]==1) {
@@ -402,8 +414,8 @@ class BusOperation{
 		bus.Psg.delete(psg);
 		System.out.println("Cancellation Successful");
 	}
-	
-//	checks if the the is available for booking
+
+	//	checks if the the is available for booking
 	void CheckStatus(Bus bus,PassengerDetails psg) { //Seat booking
 		int seatflag=0;
 		for(int m=psg.dep;m<=psg.des;m++) {
@@ -415,6 +427,7 @@ class BusOperation{
 				System.out.println("  Seat already booked.Please choose another seat.");
 				System.out.println("\n  Enter seat number: ");
 				psg.SeatNo=sc.nextInt();
+				sc.nextLine();
 				CheckStatus(bus,psg);
 				break;
 			}
@@ -442,7 +455,7 @@ class BusOperation{
 
 	}
 
-//	calculates the fare
+	//	calculates the fare
 	int fare(Bus bus, PassengerDetails psg) {
 		int fare=0;
 		int rate=2, total_dis=0;
@@ -450,12 +463,12 @@ class BusOperation{
 			total_dis += TheArr[bus.ID-1].dist[i];
 		}
 		fare = total_dis * rate;
-//		psg.fare = fare;
+		//		psg.fare = fare;
 		return fare;
 	}
 
 	Bus[] TheArr=new Bus[5];
-	
+
 	void initiate() {
 
 		//Bus 1
@@ -608,7 +621,7 @@ class LinkedList{
 	void display() {
 		Node ptr=head;
 		while(ptr!=null) {
-			System.out.print("PRN"+ptr.p.PNR);
+			System.out.print("PNR"+ptr.p.PNR);
 			ptr=ptr.next;
 		}
 	}
@@ -681,3 +694,356 @@ class Queue{
 		}
 	}
 }
+
+
+//--------------------------------
+//|	1. BOOKING		|
+//|_______________________________|
+//|	2. CANCELLATION		|
+//|_______________________________|
+//|	3. CHECK STATUS		|
+//|_______________________________|
+//|	4. EXIT			|
+//|_______________________________|
+//
+//1
+//
+//         Available Stops
+//--------------------------------------
+//Pune |  Nagar |  Aurangabad |  Hadapsar | 
+//Pimpri |  Karve |  Swargate |  Satara | 
+//Sangli |  Solapur |  Beed |  Mumbai | 
+//Raigarh |  Ratnagiri | 
+//--------------------------------------
+// Enter the departure:  punr
+// Enter the destination:  nagar
+//
+// Bus not available !!!!
+//
+//--------------------------------
+//|	1. BOOKING		|
+//|_______________________________|
+//|	2. CANCELLATION		|
+//|_______________________________|
+//|	3. CHECK STATUS		|
+//|_______________________________|
+//|	4. EXIT			|
+//|_______________________________|
+//
+//1
+//
+//         Available Stops
+//--------------------------------------
+//Pune |  Nagar |  Aurangabad |  Hadapsar | 
+//Pimpri |  Karve |  Swargate |  Satara | 
+//Sangli |  Solapur |  Beed |  Mumbai | 
+//Raigarh |  Ratnagiri | 
+//--------------------------------------
+// Enter the departure:  pune
+// Enter the destination:  nagar
+//-------------------------------
+// Bus ID: 1
+// Bus Name: JABBAR
+// Bus Time: 10:30
+//-------------------------------
+// Enter Bus Id: 1
+//   ------------
+//  | 1 2 3 4 5  |
+//  | 6 7 8 9 10 |  --> DRIVER
+//   ------------
+// Enter number of seats: 10
+// Enter your name: y
+// Enter seat number: 1
+//
+// *Fare: 278
+//
+// Do you want to confirm booking?? Y/N : y
+//
+// Booking successful!
+//
+//
+// ------------ YOUR TICKET ------------
+//| Name: y				|
+//| Bus ID: 1	| Bus Name: JABBAR	|
+//| Seat No.: 1	| Fare: 278		|
+//| PNR: 111				|
+// -------------------------------------
+// * Note your PNR for future reference
+//
+//
+// Enter your name: y
+// Enter seat number: 2
+//
+// *Fare: 278
+//
+// Do you want to confirm booking?? Y/N : y
+//
+// Booking successful!
+//
+//
+// ------------ YOUR TICKET ------------
+//| Name: y				|
+//| Bus ID: 1	| Bus Name: JABBAR	|
+//| Seat No.: 2	| Fare: 278		|
+//| PNR: 112				|
+// -------------------------------------
+// * Note your PNR for future reference
+//
+//
+// Enter your name: y
+// Enter seat number: 3
+//
+// *Fare: 278
+//
+// Do you want to confirm booking?? Y/N : y
+//
+// Booking successful!
+//
+//
+// ------------ YOUR TICKET ------------
+//| Name: y				|
+//| Bus ID: 1	| Bus Name: JABBAR	|
+//| Seat No.: 3	| Fare: 278		|
+//| PNR: 113				|
+// -------------------------------------
+// * Note your PNR for future reference
+//
+//
+// Enter your name: y
+// Enter seat number: 4
+//
+// *Fare: 278
+//
+// Do you want to confirm booking?? Y/N : y
+//
+// Booking successful!
+//
+//
+// ------------ YOUR TICKET ------------
+//| Name: y				|
+//| Bus ID: 1	| Bus Name: JABBAR	|
+//| Seat No.: 4	| Fare: 278		|
+//| PNR: 114				|
+// -------------------------------------
+// * Note your PNR for future reference
+//
+//
+// Enter your name: y
+// Enter seat number: 5
+//
+// *Fare: 278
+//
+// Do you want to confirm booking?? Y/N : y
+//
+// Booking successful!
+//
+//
+// ------------ YOUR TICKET ------------
+//| Name: y				|
+//| Bus ID: 1	| Bus Name: JABBAR	|
+//| Seat No.: 5	| Fare: 278		|
+//| PNR: 115				|
+// -------------------------------------
+// * Note your PNR for future reference
+//
+//
+// Enter your name: y
+// Enter seat number: 6
+//
+// *Fare: 278
+//
+// Do you want to confirm booking?? Y/N : y
+//
+// Booking successful!
+//
+//
+// ------------ YOUR TICKET ------------
+//| Name: y				|
+//| Bus ID: 1	| Bus Name: JABBAR	|
+//| Seat No.: 6	| Fare: 278		|
+//| PNR: 116				|
+// -------------------------------------
+// * Note your PNR for future reference
+//
+//
+// Enter your name: y
+// Enter seat number: 7
+//
+// *Fare: 278
+//
+// Do you want to confirm booking?? Y/N : y
+//
+// Booking successful!
+//
+//
+// ------------ YOUR TICKET ------------
+//| Name: y				|
+//| Bus ID: 1	| Bus Name: JABBAR	|
+//| Seat No.: 7	| Fare: 278		|
+//| PNR: 117				|
+// -------------------------------------
+// * Note your PNR for future reference
+//
+//
+// Enter your name: y
+// Enter seat number: 8
+//
+// *Fare: 278
+//
+// Do you want to confirm booking?? Y/N : y
+//
+// Booking successful!
+//
+//
+// ------------ YOUR TICKET ------------
+//| Name: y				|
+//| Bus ID: 1	| Bus Name: JABBAR	|
+//| Seat No.: 8	| Fare: 278		|
+//| PNR: 118				|
+// -------------------------------------
+// * Note your PNR for future reference
+//
+//
+// Enter your name: y
+// Enter seat number: 9
+//
+// *Fare: 278
+//
+// Do you want to confirm booking?? Y/N : y
+//
+// Booking successful!
+//
+//
+// ------------ YOUR TICKET ------------
+//| Name: y				|
+//| Bus ID: 1	| Bus Name: JABBAR	|
+//| Seat No.: 9	| Fare: 278		|
+//| PNR: 119				|
+// -------------------------------------
+// * Note your PNR for future reference
+//
+//
+// Enter your name: y
+// Enter seat number: 10
+//
+// *Fare: 278
+//
+// Do you want to confirm booking?? Y/N : y
+//
+// Booking successful!
+//
+//
+// ------------ YOUR TICKET ------------
+//| Name: y				|
+//| Bus ID: 1	| Bus Name: JABBAR	|
+//| Seat No.: 10	| Fare: 278		|
+//| PNR: 120				|
+// -------------------------------------
+// * Note your PNR for future reference
+//
+//
+//--------------------------------
+//|	1. BOOKING		|
+//|_______________________________|
+//|	2. CANCELLATION		|
+//|_______________________________|
+//|	3. CHECK STATUS		|
+//|_______________________________|
+//|	4. EXIT			|
+//|_______________________________|
+//
+//1
+//
+//         Available Stops
+//--------------------------------------
+//Pune |  Nagar |  Aurangabad |  Hadapsar | 
+//Pimpri |  Karve |  Swargate |  Satara | 
+//Sangli |  Solapur |  Beed |  Mumbai | 
+//Raigarh |  Ratnagiri | 
+//--------------------------------------
+// Enter the departure:  pune 
+// Enter the destination:  nagar
+//-------------------------------
+// Bus ID: 1
+// Bus Name: JABBAR
+// Bus Time: 10:30
+//-------------------------------
+// Enter Bus Id: 1
+//   ------------
+//  | B B B B B  |
+//  | B B B B B |  --> DRIVER
+//   ------------
+// Enter number of seats: 1
+// Seats not avalible !!!
+//Do you want to enter the waiting list? Y/N
+//y
+// Enter your name: sayli
+//your PNR No.: 1111
+//--------------------------------
+//|	1. BOOKING		|
+//|_______________________________|
+//|	2. CANCELLATION		|
+//|_______________________________|
+//|	3. CHECK STATUS		|
+//|_______________________________|
+//|	4. EXIT			|
+//|_______________________________|
+//
+//3
+//
+// Enter Bus Id: 1
+// Enter PNR No: 1111
+// Passenger Name :sayli
+// SeatNo. :0
+// Departure :0
+// Destination :1
+// Passenger in queue
+//--------------------------------
+//|	1. BOOKING		|
+//|_______________________________|
+//|	2. CANCELLATION		|
+//|_______________________________|
+//|	3. CHECK STATUS		|
+//|_______________________________|
+//|	4. EXIT			|
+//|_______________________________|
+//
+//2
+//
+// Enter Bus Id: 1
+// Enter PNR No: 120
+//
+// Passenger Name :y		SeatNo. :10
+// Departure :Pune			Destination :Nagar
+//
+// Comfirm Cancellation? Y/N :  y
+//Cancellation Successful
+//--------------------------------
+//|	1. BOOKING		|
+//|_______________________________|
+//|	2. CANCELLATION		|
+//|_______________________________|
+//|	3. CHECK STATUS		|
+//|_______________________________|
+//|	4. EXIT			|
+//|_______________________________|
+//
+//3
+//
+// Enter Bus Id: 1
+// Enter PNR No: 1111
+//
+// Passenger Name :sayli		SeatNo. :10
+// Departure :Pune			Destination :Nagar
+//
+// Booking Status: Seat Confirmed
+//--------------------------------
+//|	1. BOOKING		|
+//|_______________________________|
+//|	2. CANCELLATION		|
+//|_______________________________|
+//|	3. CHECK STATUS		|
+//|_______________________________|
+//|	4. EXIT			|
+//|_______________________________|
+//
