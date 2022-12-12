@@ -78,7 +78,7 @@ public class BUSMain {
 						sc.nextLine();
 						psg=bo.Passengerfinder(bus, prn);
 						if(psg!=null) {
-							System.out.print("  Comfirm Cancellation? Y/N :  ");
+							System.out.print("  Confirm Cancellation? Y/N :  ");
 							char cancel=sc.nextLine().charAt(0);
 							if(cancel=='Y'||cancel=='y') {
 								bo.cancellation(bus,psg);
@@ -88,7 +88,7 @@ public class BUSMain {
 							}
 
 						}else {
-							System.out.println("  Pasenger Not Declined !");
+							System.out.println("  Passenger Not Declined !");
 						}
 					}
 					else {
