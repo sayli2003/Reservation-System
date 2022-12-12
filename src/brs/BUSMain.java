@@ -459,7 +459,7 @@ class BusOperation{
 	int fare(Bus bus, PassengerDetails psg) {
 		int fare=0;
 		int rate=2, total_dis=0;
-		for(int i=psg.dep; i<=psg.des; i++) {
+		for(int i=(psg.dep+1); i<=psg.des; i++) {
 			total_dis += TheArr[bus.ID-1].dist[i];
 		}
 		fare = total_dis * rate;
