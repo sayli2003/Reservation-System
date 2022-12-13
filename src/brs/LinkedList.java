@@ -8,7 +8,6 @@ class LinkedList{
 	}
 	void add(PassengerDetails p) {
 		Node temp=new Node(p);
-		System.out.println("here"+p.id);
 		if(head==null) {
 			head=temp;
 		}
